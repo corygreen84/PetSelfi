@@ -101,29 +101,29 @@ class BottomRotarySelector: NSObject {
             self.rotary?.frame.size.height = 250.0
             let centerButtonCenter = CGPoint(x: self.centerButton!.center.x, y: self.centerButton!.center.y)
             self.rotary?.center = centerButtonCenter
-            self.rotary!.layer.cornerRadius = self.rotary!.frame.size.height / 2.0
+            self.rotary?.layer.cornerRadius = self.rotary!.frame.size.height / 2.0
             
         }) { (complete) in
             // placement of the icons //
-            let numberOfIcons = 6
+            let numberOfIcons = 2
             var angle = CGFloat(2 * Double.pi)
             let step = CGFloat(2 * Double.pi) / CGFloat(numberOfIcons)
             let center = CGPoint(x: (self.rotary?.center.x)!, y: (self.rotary?.center.y)!)
             
-            for _ in 0...numberOfIcons{
+            for index in 0...numberOfIcons{
                 let xPosition = cos(angle) * 90 + center.x
                 let yPosition = sin(angle) * 90 + center.y
                 
                 let animalButton = UIButton()
                 animalButton.frame.size.height = 50.0
                 animalButton.frame.size.width = 50.0
-                animalButton.setImage(UIImage(named: "cat"), for: UIControl.State.normal)
+                animalButton.setImage(UIImage(named: "animal\(index)"), for: UIControl.State.normal)
                 animalButton.center = CGPoint(x: xPosition, y: yPosition)
                 animalButton.layer.cornerRadius = animalButton.frame.size.height / 2
                 animalButton.layer.borderWidth = 2.0
                 animalButton.layer.borderColor = Colors.sharedInstance.orangeColor.cgColor
                 animalButton.layer.zPosition = 1
-                animalButton.tag = 0
+                animalButton.tag = 1
                 
                 
                 self.passedInView?.addSubview(animalButton)
@@ -140,7 +140,15 @@ class BottomRotarySelector: NSObject {
             self.rotary?.frame.size.height = 0.0
             let centerButtonCenter = CGPoint(x: self.centerButton!.center.x, y: self.centerButton!.center.y)
             self.rotary?.center = centerButtonCenter
-            self.rotary!.layer.cornerRadius = self.rotary!.frame.size.height / 2.0
+            self.rotary?.layer.cornerRadius = self.rotary!.frame.size.height / 2.0
+            
+            for (_, element) in self.passedInView!.subviews.enumerated() {
+                if(element.isKind(of: UIButton.self)){
+                    if(element.tag == 1){
+                        element.removeFromSuperview()
+                    }
+                }
+            }
             
             
         }) { (complete) in
