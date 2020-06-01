@@ -51,7 +51,7 @@ class BottomRotarySelector: NSObject {
     
     // creating the center button //
     func createCenterButton(){
-        centerButton = UIButton(frame: CGRect(x: 0.0, y: 0.0, width: 80.0, height: 80.0))
+        centerButton = UIButton(frame: CGRect(x: 0.0, y: 0.0, width: 100.0, height: 100.0))
         centerButton?.setImage(UIImage(named: "paw-circle"), for: UIControl.State.normal)
         let centerOfBottomBox = CGPoint(x: self.bottomBox!.center.x, y: self.bottomBox!.center.y)
         centerButton?.center = centerOfBottomBox
@@ -102,22 +102,47 @@ class BottomRotarySelector: NSObject {
             let centerButtonCenter = CGPoint(x: self.centerButton!.center.x, y: self.centerButton!.center.y)
             self.rotary?.center = centerButtonCenter
             self.rotary!.layer.cornerRadius = self.rotary!.frame.size.height / 2.0
-
             
         }) { (complete) in
+            // placement of the icons //
+            let numberOfIcons = 6
+            var angle = CGFloat(2 * Double.pi)
+            let step = CGFloat(2 * Double.pi) / CGFloat(numberOfIcons)
+            let center = CGPoint(x: (self.rotary?.center.x)!, y: (self.rotary?.center.y)!)
             
+            for _ in 0...numberOfIcons{
+                let xPosition = cos(angle) * 90 + center.x
+                let yPosition = sin(angle) * 90 + center.y
+                
+                let animalButton = UIButton()
+                animalButton.frame.size.height = 50.0
+                animalButton.frame.size.width = 50.0
+                animalButton.setImage(UIImage(named: "cat"), for: UIControl.State.normal)
+                animalButton.center = CGPoint(x: xPosition, y: yPosition)
+                animalButton.layer.cornerRadius = animalButton.frame.size.height / 2
+                animalButton.layer.borderWidth = 2.0
+                animalButton.layer.borderColor = Colors.sharedInstance.orangeColor.cgColor
+                animalButton.layer.zPosition = 1
+                animalButton.tag = 0
+                
+                
+                self.passedInView?.addSubview(animalButton)
+                
+                angle += step
+            }
         }
     }
     
     // retracting the rotary dial //
     func retractRotaryDial(){
         UIView.animate(withDuration: 0.2, animations: {
-            
             self.rotary?.frame.size.width = 0.0
             self.rotary?.frame.size.height = 0.0
             let centerButtonCenter = CGPoint(x: self.centerButton!.center.x, y: self.centerButton!.center.y)
             self.rotary?.center = centerButtonCenter
             self.rotary!.layer.cornerRadius = self.rotary!.frame.size.height / 2.0
+            
+            
         }) { (complete) in
             
         }
@@ -140,30 +165,5 @@ class BottomRotarySelector: NSObject {
         self.passedInView?.addSubview(rotary!)
         self.passedInView?.bringSubviewToFront(centerButton!)
         
-        
-        // placement of the icons //
-        let numberOfIcons = 6
-        var angle = CGFloat(2 * Double.pi)
-        let step = CGFloat(2 * Double.pi) / CGFloat(numberOfIcons)
-        let center = CGPoint(x: (rotary?.center.x)!, y: (rotary?.center.y)!)
-        
-        for _ in 0...numberOfIcons{
-            let xPosition = cos(angle) * 80 + center.x
-            let yPosition = sin(angle) * 80 + center.y
-
-            let animalButton = UIButton(frame: CGRect(x: 0.0, y: 0.0, width: 50.0, height: 50.0))
-            animalButton.setImage(UIImage(named: "cat"), for: UIControl.State.normal)
-            animalButton.center = CGPoint(x: xPosition, y: yPosition)
-            animalButton.layer.cornerRadius = animalButton.frame.size.height / 2
-            animalButton.layer.borderWidth = 2.0
-            animalButton.layer.borderColor = Colors.sharedInstance.orangeColor.cgColor
-            animalButton.layer.zPosition = 1
-            animalButton.tag = 0
-            
-            
-            self.passedInView?.addSubview(animalButton)
-            
-            angle += step
-        }
     }
 }
